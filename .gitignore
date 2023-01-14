@@ -1,5 +1,4 @@
 .DS_Store
 .env
 logs
-node_modules
 template\startbootstrap-sb-admin-2-gh-pages
