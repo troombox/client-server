@@ -59,3 +59,32 @@ const composeResetPasswordEmail = function(o)
 		html += "</body></html>";
 	return html;
 }
+
+
+// contact us email
+const composeContactUsEmail = function(msg)
+{
+	let baseurl = process.env.NL_SITE_URL || 'http://localhost:3000';
+	var html = "<html><body>";
+		html += msg;
+		html += "</body></html>";
+	return html;
+}
+
+module.exports.sendContactUsMail = function(message)
+{
+	var mailOptions = {
+		from: 'mailtest082521@gmail.com',
+		to: process.env.CONTACT_US_EMAIL,
+		subject: 'Contact Us',
+		//text: body
+		html: composeContactUsEmail(message)
+	  };
+	
+	  transporter.sendMail(mailOptions, function (error, info) {
+		if (error) {
+		  console.log(error);
+		}
+	  });
+}
+

@@ -86,46 +86,59 @@ module.exports = function(app) {
 		req.session.destroy(function(e){ res.status(200).send('ok'); });
 	})
 
-/*
-	control panel
-*/
-
-	app.get('/home', function(req, res) {
-		if (req.session.user == null){
-			res.redirect('/');
-		}	else{
-			res.render('home', {
-				title : 'Control Panel',
-				countries : countries,
-				udata : req.session.user
-			});
-		}
+	/*
+		about us
+	*/
+	app.post('/submit-form',function(req, res){
+		msg = `
+      <p>Name: ${req.body.name}</p>
+      <p>Email: ${req.body.email}</p>
+      <p>Message: ${req.body.message}</p>
+    `;
+		// emailjs.sendContactUsMail(msg);
+		return res.status(200).send('Thanks, your message was sent!');
 	});
 
-	app.post('/home', function(req, res){
-		if (req.session.user == null){
-			res.redirect('/');
-		}	else{
-			accounts.updateAccount({
-				id		: req.session.user._id,
-				name	: req.body['name'],
-				email	: req.body['email'],
-				pass	: req.body['pass'],
-				country	: req.body['country']
-			}, function(e, o){
-				if (e){
-					res.status(400).send('error-updating-account');
-				}	else{
-					req.session.user = o.value;
-					res.status(200).send('ok');
-				}
-			});
-		}
-	});
+	/*
+		control panel
+	*/
 
-/*
-	new accounts
-*/
+		app.get('/home', function(req, res) {
+			if (req.session.user == null){
+				res.redirect('/');
+			}	else{
+				res.render('home', {
+					title : 'Control Panel',
+					countries : countries,
+					udata : req.session.user
+				});
+			}
+		});
+
+		app.post('/home', function(req, res){
+			if (req.session.user == null){
+				res.redirect('/');
+			}	else{
+				accounts.updateAccount({
+					id		: req.session.user._id,
+					name	: req.body['name'],
+					email	: req.body['email'],
+					pass	: req.body['pass'],
+					country	: req.body['country']
+				}, function(e, o){
+					if (e){
+						res.status(400).send('error-updating-account');
+					}	else{
+						req.session.user = o.value;
+						res.status(200).send('ok');
+					}
+				});
+			}
+		});
+
+	/*
+		new accounts
+	*/
 
 	app.get('/signup', function(req, res) {
 		res.render('signup', {  title: 'Signup', countries : countries });
@@ -135,8 +148,8 @@ module.exports = function(app) {
 		if(!await verifyCaptcha(req)){
 			res.status(409).send("");
 
-	   }
-	   else{
+		}
+		else{
 		accounts.addNewAccount({
 			name 	: req.body['name'],
 			email 	: req.body['email'],
@@ -153,15 +166,17 @@ module.exports = function(app) {
 	}
 	});
 
-/*
+	/*
 	password reset
-*/
-app.get('/about-us', function(req, res){
+	*/
+	app.get('/about-us', function(req, res){
 	res.sendFile(__dirname + '/views/about-us.html');
-});
-app.get('/forgot-password', function(req, res){
+	});
+
+	app.get('/forgot-password', function(req, res){
 	res.sendFile(__dirname + '/views/forgot-password.html');
-});
+	});
+
 	app.post('/forgot-password', function(req, res){
 		let email = req.body['email'];
 		accounts.isuserExits(email,function(isUserExists){
@@ -169,7 +184,7 @@ app.get('/forgot-password', function(req, res){
 				return res.status(500).json({
 					success: false,
 					message: 'Email does not exist',
-				  });
+					});
 			}
 			else{
 
@@ -183,12 +198,12 @@ app.get('/forgot-password', function(req, res){
 								return res.status(200).json({
 									success: true,
 									message: 'Please check you inbox',
-								  });
+									});
 							}	else{
 								return res.status(500).json({
 									success: false,
 									message: 'Error sending email',
-								  });
+									});
 							}
 						});
 					}
@@ -197,8 +212,6 @@ app.get('/forgot-password', function(req, res){
 			}
 		})
 		//console.log("lost password",email);
-		
-		
 	});
 
 	app.get('/active-account', function(req, res) {
@@ -213,6 +226,7 @@ app.get('/forgot-password', function(req, res){
 			}
 		})
 	});
+
 	app.get('/reset-password', function(req, res) {
 		accounts.validatePasswordKey(req.query['key'], req.ip, function(e, o){
 			if (e || o == null){
