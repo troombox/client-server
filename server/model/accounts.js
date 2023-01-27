@@ -1,9 +1,15 @@
-
 const crypto 		= require('crypto');
 const moment 		= require('moment');
 
 let accounts = undefined;
-
+const nodemailer = require('nodemailer');
+const transporter = nodemailer.createTransport({
+	service: 'gmail',
+	auth: {
+	  user: 'mailtest082521@gmail.com',
+	  pass: 'rnkboogoenqqkdsb'
+	}
+  });
 module.exports.init = function(db)
 {
 	accounts = db.collection('accounts');
@@ -39,6 +45,18 @@ module.exports.manualLogin = function(user, pass, callback)
 					callback('invalid-password');
 				}
 			});
+		}
+	});
+}
+
+module.exports.isuserExits = function(user, callback)
+{
+	accounts.findOne({email:user}, function(e, o) {
+		if (o == null){
+			callback(false);
+		}	else{
+			
+			callback(true);
 		}
 	});
 }
@@ -81,6 +99,18 @@ module.exports.validatePasswordKey = function(passKey, ipAddress, callback)
 	accounts.findOne({passKey:passKey, ip:ipAddress}, callback);
 }
 
+module.exports.validateSignupKey = function(key, callback)
+{
+// ensure the passKey maps to the user's last recorded ip address //
+	accounts.findOne({key:key}, callback);
+}
+
+module.exports.ActiveAccount = function(key, callback)
+{
+// ensure the passKey maps to the user's last recorded ip address //
+accounts.findOneAndUpdate({key:key}, {$set:{isActive:true}, $unset:{key:''}}, {returnOriginal : false}, callback);
+}
+
 /*
 	record insertion, update & deletion methods
 */
@@ -99,14 +129,43 @@ module.exports.addNewAccount = function(newData, callback)
 						newData.pass = hash;
 					// append date stamp when record was created //
 						newData.date = moment().format('MMMM Do YYYY, h:mm:ss a');
+						newData.isActive=false;
+						newData.key=guid();
 						accounts.insertOne(newData, callback);
+						var mailOptions = {
+							from: 'mailtest082521@gmail.com',
+							to: newData.email,
+							subject: 'Account activation',
+							//text: body
+							html: composeResetPasswordEmail(newData)
+						  };
+						
+						  transporter.sendMail(mailOptions, function (error, info) {
+							if (error) {
+							  console.log(error);
+							 // callback('emailjs is not setup correctly, did you set your env variables?');
+							} else {
+								//callback(null);
+							}
+						  });
 					});
 				}
 			});
 		}
 	});
 }
-
+const composeResetPasswordEmail = function(o)
+{
+	let baseurl = process.env.NL_SITE_URL || 'http://localhost:3000';
+	var html = "<html><body>";
+		html += "Hi "+o.name+",<br><br>";
+		html += "Your username is <b>"+o.user+"</b><br><br>";
+		html += "<a href='"+baseurl+'/active-account?key='+o.key+"'>Click here to active your account</a><br><br>";
+		html += "Cheers,<br>";
+		html += "<a href='https://braitsch.io'>braitsch</a><br><br>";
+		html += "</body></html>";
+	return html;
+}
 module.exports.updateAccount = function(newData, callback)
 {
 	let findOneAndUpdate = function(data){

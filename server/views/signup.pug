@@ -2,11 +2,12 @@
 extends layout
 
 block content
-
-	include account
-	include modals/alert
+	.d-flex.align-items-center.justify-content-center(style="background-color:#4268d6")
+		include account
+		include modals/alert
 
 block scripts
+	script(src="https://www.google.com/recaptcha/api.js?render=6LdQpygkAAAAAMJxXPAeZtJK93co0N2-qNJ3pq67")
 	script(src='/js/views/signup.js')
 	script(src='/js/controllers/signupController.js')
 	script(src='/js/form-validators/accountValidator.js')

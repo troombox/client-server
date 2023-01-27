@@ -1,3 +1,18 @@
+function getResponseTokenForCaptcha(){
+	return new Promise((myResolve, myReject)=>{
+	grecaptcha.ready(function() {
+		grecaptcha.execute('6LdQpygkAAAAAMJxXPAeZtJK93co0N2-qNJ3pq67', {action: 'submit'}).then((token)=> {
+			// Add your logic to submit to your backend server here.
+			myResolve(token);
+		});
+	  });
+	});
+}
+  async function onload() {
+    let token=await getResponseTokenForCaptcha();
+    document.getElementById('cap').value=token;
+   }
+   onload();
 
 $(document).ready(function(){
 	
@@ -17,6 +32,9 @@ $(document).ready(function(){
 			}	else if (e.responseText == 'username-taken'){
 				av.showInvalidUserName();
 			}
+			 if(e.status==409){
+				lv.showLoginError('Login Failure', 'Captcha verfication failed please refresh the page and try again');
+			}
 		}
 	});
 	$('#name-tf').focus();
@@ -33,6 +51,6 @@ $(document).ready(function(){
 
 	$('.modal-alert').modal({ show:false, keyboard : false, backdrop : 'static' });
 	$('.modal-alert .modal-header h4').text('Account Created!');
-	$('.modal-alert .modal-body p').html('Your account has been created.</br>Click OK to return to the login page.');
+	$('.modal-alert .modal-body p').html('Your account has been created. please check inbox to active the account</br>Click OK to return to the login page.');
 
 });

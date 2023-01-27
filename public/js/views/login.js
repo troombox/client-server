@@ -8,19 +8,38 @@ $(document).ready(function(){
 
 	$('#login').ajaxForm({
 		beforeSubmit : function(formData, jqForm, options){
-			if (lv.validateForm() == false){
-				return false;
-			} 	else{
-			// append 'remember-me' option to formData to write local cookie //
-				formData.push({name:'remember-me', value:$('#btn_remember').find('span').hasClass('fa-check-square')});
-				return true;
-			}
+		
+					if (lv.validateForm() == false){
+						return false;
+					} 	else{
+					// append 'remember-me' option to formData to write local cookie //
+						formData.push({name:'remember-me', value:$('#btn_remember').find('span').hasClass('fa-check-square')});
+						let rememberMe = false;	
+						if($('#remember-me').is(':checked')){
+							rememberMe = true;
+						}
+						formData.push({name:'remember-me', value:rememberMe});
+						return true;
+					}
+			
 		},
 		success	: function(responseText, status, xhr, $form){
-			if (status == 'success') window.location.href = '/home';
+			if (status == 'success') window.location.href = '/index';
 		},
 		error : function(e){
+			console.log(e);
+			if(e.status==401)
+			{
+				lv.showLoginError('Login Failure', 'Please active your account');
+			}
+			else if(e.status==409){
+				lv.showLoginError('Login Failure', 'Captcha verfication failed please refresh the page and try again');
+			}
+			else{
 			lv.showLoginError('Login Failure', 'Please check your username and/or password');
+			}
+			//window.location.href = '/index'
+			return true;
 		}
 	});
 
