@@ -95,7 +95,7 @@ module.exports = function(app) {
       <p>Email: ${req.body.email}</p>
       <p>Message: ${req.body.message}</p>
     `;
-		// emailjs.sendContactUsMail(msg);
+		emailjs.sendContactUsMail(msg);
 		return res.status(200).send('Thanks, your message was sent!');
 	});
 
