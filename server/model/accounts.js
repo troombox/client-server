@@ -3,11 +3,12 @@ const moment 		= require('moment');
 
 let accounts = undefined;
 const nodemailer = require('nodemailer');
+const { env } = require('process');
 const transporter = nodemailer.createTransport({
 	service: 'gmail',
 	auth: {
-	  user: 'mailtest082521@gmail.com',
-	  pass: 'rnkboogoenqqkdsb'
+	  user: process.env.EMAIL_USER,
+	  pass: process.env.EMAIL_PASS
 	}
   });
 module.exports.init = function(db)
@@ -133,7 +134,7 @@ module.exports.addNewAccount = function(newData, callback)
 						newData.key=guid();
 						accounts.insertOne(newData, callback);
 						var mailOptions = {
-							from: 'mailtest082521@gmail.com',
+							from: process.env.EMAIL_USER,
 							to: newData.email,
 							subject: 'Account activation',
 							//text: body

@@ -10,8 +10,8 @@ const nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
 	service: 'gmail',
 	auth: {
-	  user: 'mailtest082521@gmail.com',
-	  pass: 'rnkboogoenqqkdsb'
+	  user: process.env.EMAIL_USER,
+	  pass: process.env.EMAIL_PASS
 	}
   });
 module.exports.dispatchResetPasswordLink = function(account, callback)
@@ -23,7 +23,7 @@ module.exports.dispatchResetPasswordLink = function(account, callback)
 	// 	attachment	: composeResetPasswordEmail(account)
 	// };
 	var mailOptions = {
-		from: 'mailtest082521@gmail.com',
+		from: process.env.EMAIL_USER,
 		to: account.email,
 		subject: 'Password Reset',
 		//text: body
@@ -74,8 +74,8 @@ const composeContactUsEmail = function(msg)
 module.exports.sendContactUsMail = function(message)
 {
 	var mailOptions = {
-		from: 'mailtest082521@gmail.com',
-		to: process.env.CONTACT_US_EMAIL,
+		from: process.env.EMAIL_USER,
+		to: process.env.EMAIL_USER,
 		subject: 'Contact Us',
 		//text: body
 		html: composeContactUsEmail(message)
