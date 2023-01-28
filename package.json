@@ -14,12 +14,18 @@
   "license": "MIT",
   "dependencies": {
     "@braitsch/express": "^1.1.8",
+    "console-stamp": "^3.1.0",
     "cookie-parser": "^1.4.5",
     "dotenv": "^16.0.3",
     "emailjs": "^3.4.0",
     "moment": "^2.29.1",
     "mongodb": "^3.7.3",
     "mongoose": "^6.8.3",
+    "mongoose-paginate-v2": "^1.7.1",
+    "node-fetch": "^2.6.8",
+    "nodemailer": "^6.9.0",
+    "nodemon": "^2.0.20",
+    "package.json": "^2.0.1",
     "pug": "^3.0.2",
     "stylus": "^0.54.8"
   },

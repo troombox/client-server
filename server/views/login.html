@@ -13,40 +13,33 @@
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href='//cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.1.1/gh-fork-ribbon.min.css'>
+
+    <script src="https://www.google.com/recaptcha/api.js?render=6LdQpygkAAAAAMJxXPAeZtJK93co0N2-qNJ3pq67"></script>
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
+    <!-- Import of libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js"></script>
 
     <!-- Import of the validation js -->
     <script src="js/validation.js"></script>
-
-    <!-- Local js code used for validation  -->
-    <script>
-        window.onload=function(){
-            var submitButton = document.getElementById("submit-button");
-            submitButton.addEventListener("click", function(event) {
-                var email = document.getElementById("exampleInputEmail").value;
-                var password
-                if (resultParser(resultCreatorForLoginScreen(validateEmail(email), validatePass(password.value)))) {
-                    console.log("Valid email address");
-                } else {
-                    event.preventDefault();
-                    console.log("Invalid email address");
-                    showError("Invalid email address");
-                }
-            });
-        }
-
-        function showError(message) {
-            var errorMessage = document.getElementById("error-message");
-            errorMessage.innerText = message;
-            $('#myModal').modal('show');
-        }
-
-    </script>
+    <script src='/js/views/login.js'></script>
+	<script src='/js/controllers/loginController.js'></script>
+	<script src='/js/form-validators/loginValidator.js'></script>
+	<script src='/js/form-validators/emailValidator.js'></script>
 
 </head>
 
@@ -54,24 +47,22 @@
       
     <div class="container">
 
-        <div class="modal" tabindex="-1" role="dialog" id="myModal">
-            <div class="modal-dialog" role="document">
+        <div class="modal-alert modal fade">
+            <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title">Error</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
+                  <h4 class="modal-title"></h4>
                 </div>
                 <div class="modal-body">
-                    <p id="error-message"></p>
+                  <p></p>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button id="ok" class="btn btn-primary" data-dismiss="modal">OK</button>
                 </div>
               </div>
             </div>
           </div>
+          
 
         <!-- Outer Row -->
         <div class="row justify-content-center">
@@ -84,47 +75,42 @@
                         <div class="row">
                             <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
                             <div class="col-lg-6">
-                                <div class="p-5">
-                                    <div class="text-center">
+                                <div   class="center-vertical">
+                                    <form class="card card-body bg-light"  id="login" method="post">
+                                     
+                                      <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
-                                    </div>
-                                    <form class="user">
-                                        <div class="form-group">
-                                            <input type="email" class="form-control form-control-user"
-                                                id="exampleInputEmail" aria-describedby="emailHelp"
-                                                placeholder="Enter Email Address...">
+                                      </div>
+                                      <div class="form-group">
+                                        <label>Username</label>
+                                        <input type="text" class="form-control" id="user-tf" name="user" aria-describedby="emailHelp"
+                                        placeholder="Enter Email Address...">
+                                      </div>
+                                      <div class="form-group">
+                                        <label>Password</label>
+                                        <input type="password" class="form-control" id="pass-tf" name="pass" placeholder="Password">
+                                      </div>
+                                      <input type="text" style="display: none;" class="form-control" id="cap" name="cap" placeholder="Password">
+                                      <div id="row1">
+                                        <button type="submit" id="btn_sign_in" class="btn btn-primary btn-user btn-block">
+                                          <span class="fa fa-lock"></span> Login
+                                        </button>
+                                        <br>
+                                        <button type="button" id="btn_remember" class="btn btn-light btn-left">
+                                            <span class="fa fa-check-square"></span> Remember Me
+                                          </button>
+                                      </div>
+                                      <hr>
+                                      <div class="btm-links">
+                                        <div id="forgot-password">
+                                          <a href="/forgot-password">Forgot Your Password?</a>
                                         </div>
-                                        <div class="form-group">
-                                            <input type="password" class="form-control form-control-user"
-                                                id="exampleInputPassword" placeholder="Password">
+                                        <div id="create-account">
+                                          <a href="/signup">Create An Account</a>
                                         </div>
-                                        <div class="form-group">
-                                            <div class="custom-control custom-checkbox small">
-                                                <input type="checkbox" class="custom-control-input" id="customCheck">
-                                                <label class="custom-control-label" for="customCheck">Remember
-                                                    Me</label>
-                                            </div>
-                                        </div>
-                                        <a href="index.html" class="btn btn-primary btn-user btn-block" id="submit-button">
-                                        <!-- <a class="btn btn-primary btn-user btn-block" id="submit-button"> -->
-                                            Login
-                                        </a>
-                                        <!-- <hr> -->
-                                        <!-- <a href="index.html" class="btn btn-google btn-user btn-block">
-                                            <i class="fab fa-google fa-fw"></i> Login with Google
-                                        </a>
-                                        <a href="index.html" class="btn btn-facebook btn-user btn-block">
-                                            <i class="fab fa-facebook-f fa-fw"></i> Login with Facebook
-                                        </a> -->
+                                      </div>
                                     </form>
-                                    <hr>
-                                    <div class="text-center">
-                                        <a class="small" href="forgot-password.html">Forgot Password?</a>
-                                    </div>
-                                    <div class="text-center">
-                                        <a class="small" href="register.html">Create an Account!</a>
-                                    </div>
-                                </div>
+                                  </div>
                             </div>
                         </div>
                     </div>
@@ -136,16 +122,22 @@
 
     </div>
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-    <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
-
 </body>
-
+<script>
+  function getResponseTokenForCaptcha(){
+	return new Promise((myResolve, myReject)=>{
+	grecaptcha.ready(function() {
+		grecaptcha.execute('6LdQpygkAAAAAMJxXPAeZtJK93co0N2-qNJ3pq67', {action: 'submit'}).then((token)=> {
+			// Add your logic to submit to your backend server here.
+			myResolve(token);
+		});
+	  });
+	});
+}
+  async function onload() {
+    let token=await getResponseTokenForCaptcha();
+    document.getElementById('cap').value=token;
+   }
+   onload();
+</script>
 </html>

@@ -1,4 +1,8 @@
+# .vscode
+**/.vscode
+.vscode
 .DS_Store
 .env
 logs
 template\startbootstrap-sb-admin-2-gh-pages
+node_modules

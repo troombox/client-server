@@ -4,7 +4,7 @@
 // store the userId on the client side in a hidden input field //
 input(type='hidden', value= user._id)#userId
 
-#account-form-container.center-vertical
+#account-form-container.center-vertical.center-horizontal
 	form.card.card-body.bg-light(method='post')#account-form
 		h2
 		h6#sub Please tell us a little about yourself.
@@ -18,7 +18,7 @@ input(type='hidden', value= user._id)#userId
 			label.col-sm-3.col-form-label.col-form-label-sm Email
 			.col-sm-9
 				input.form-control#email-tf(type='email', name='email', value= user.email)
-
+		input.form-control#cap(type='text', name='cap',style='display:none')
 		.form-group.row.margin-zero
 			label.col-sm-3.col-form-label.col-form-label-sm Location
 			.col-sm-9
